@@ -26,10 +26,10 @@ with st.sidebar:
         #pdf_rr = PdfReader(pdf)
     st.write('Smart Legal Assistant - POC version')
 
-ASTRA_DB_APPLICATION_TOKEN = "AstraCS:CJsrAqjhlQoHAImmAcPAuRHQ:e202dfb1ab63539b697e0f6c2426fe44988d57ce1f8d46dac65ceedf81a04be8"
-ASTRA_DB_ID = "20a98458-1146-4d49-b0ab-b5e4c63d6a80"
+ASTRA_DB_APPLICATION_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
+ASTRA_DB_ID = st.secrets["ASTRA_DB_ID"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
-OPENAI_API_KEY = "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"
 pdfreader = PdfReader('explanation.pdf')
 
 # read text from pdf

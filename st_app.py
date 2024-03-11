@@ -12,9 +12,9 @@ from langchain.text_splitter import CharacterTextSplitter
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 
-ASTRA_DB_APPLICATION_TOKEN = "AstraCS:CJsrAqjhlQoHAImmAcPAuRHQ:e202dfb1ab63539b697e0f6c2426fe44988d57ce1f8d46dac65ceedf81a04be8"
-ASTRA_DB_ID = "20a98458-1146-4d49-b0ab-b5e4c63d6a80"
-OPENAI_API_KEY = "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"
+ASTRA_DB_APPLICATION_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
+ASTRA_DB_ID = st.secrets["ASTRA_DB_ID"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 
 #side bar

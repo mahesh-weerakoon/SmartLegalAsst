@@ -1,3 +1,4 @@
+import streamlit as st
 # LangChain components to use
 from langchain.vectorstores.cassandra import Cassandra
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
@@ -6,14 +7,15 @@ from langchain_openai import  OpenAIEmbeddings
 from datasets import load_dataset
 import cassio
 from PyPDF2 import PdfReader
+from typing_extensions import Concatenate
+from langchain.text_splitter import CharacterTextSplitter
 
-ASTRA_DB_APPLICATION_TOKEN = "AstraCS:CJsrAqjhlQoHAImmAcPAuRHQ:e202dfb1ab63539b697e0f6c2426fe44988d57ce1f8d46dac65ceedf81a04be8"
-ASTRA_DB_ID = "20a98458-1146-4d49-b0ab-b5e4c63d6a80"
-
-OPENAI_API_KEY = "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"
+ASTRA_DB_APPLICATION_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
+ASTRA_DB_ID = st.secrets["ASTRA_DB_ID"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 
 pdfreader = PdfReader('explanation.pdf')
-from typing_extensions import Concatenate
+
 # read text from pdf
 raw_text = ''
 for i, page in enumerate(pdfreader.pages):
@@ -34,7 +36,7 @@ astra_vector_store = Cassandra(
     keyspace=None,
 )
 
-from langchain.text_splitter import CharacterTextSplitter
+
 
 text_splitter = CharacterTextSplitter(
     separator = "\n",
