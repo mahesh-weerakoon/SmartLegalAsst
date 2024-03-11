@@ -1,8 +1,10 @@
 streamlit == 1.31.1
 langchain == 0.1.11
+langchain-core ==0.1.29
 langchain-community == 0.0.25
 langchain-openai == 0.0.8
 cassio == 0.1.5
+cassandra-driver == 3.29.0
 datasets == 2.18.0
 tiktoken == 0.6.0
 PyPDF2 == 3.0.1

@@ -15,7 +15,20 @@ from streamlit_extras.add_vertical_space import add_vertical_space
 ASTRA_DB_APPLICATION_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
 ASTRA_DB_ID = st.secrets["ASTRA_DB_ID"]
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
+cassio.init(token=ASTRA_DB_APPLICATION_TOKEN, database_id=ASTRA_DB_ID)
+
+embedding = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)            
+
+astra_vector_store = Cassandra(
+    embedding=embedding,
+    table_name="tbl_legal_doc",
+    session=None,
+    keyspace=None,
+)
+
+st.session_state['astra_vector_index'] = VectorStoreIndexWrapper(vectorstore=astra_vector_store)
 
 #side bar
 with st.sidebar:
@@ -30,8 +43,6 @@ with st.sidebar:
     if pdf is not None:
         #st.write(pdf)
         #pdf_rr = PdfReader(pdf)
-    
-
 
         processFile = st.button('Process File')
         #str_pdf_file_name = "explanation.pdf"
@@ -44,21 +55,7 @@ with st.sidebar:
             for i, page in enumerate(pdfreader.pages):
                 content = page.extract_text()
                 if content:
-                    raw_text += content
-
-            cassio.init(token=ASTRA_DB_APPLICATION_TOKEN, database_id=ASTRA_DB_ID)
-            
-            embedding = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-            
-
-            astra_vector_store = Cassandra(
-                embedding=embedding,
-                table_name="tbl_legal_doc",
-                session=None,
-                keyspace=None,
-            )
-
-
+                    raw_text += content           
 
             text_splitter = CharacterTextSplitter(
                 separator = "\n",
@@ -67,7 +64,6 @@ with st.sidebar:
                 length_function = len,
             )
             texts = text_splitter.split_text(raw_text)
-
             astra_vector_store.add_texts(texts[:50])    
 
             print("Inserted %i headlines." % len(texts[:50]))
@@ -94,9 +90,7 @@ if prompt:= st.chat_input("Message"):
     st.session_state.messages.append(msg)
 
     with st.chat_message('user'):
-        st.markdown(prompt)
-
-    
+        st.markdown(prompt)    
 
     with st.chat_message('assistant'):
         chatresponse = st.session_state['astra_vector_index'].query(prompt, llm=llm).strip()
