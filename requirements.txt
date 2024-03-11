@@ -9,3 +9,4 @@ datasets == 2.18.0
 tiktoken == 0.6.0
 PyPDF2 == 3.0.1
 streamlit-extras == 0.4.0
+pycryptodome==3.17

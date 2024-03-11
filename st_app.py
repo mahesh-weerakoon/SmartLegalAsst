@@ -10,6 +10,7 @@ from PyPDF2 import PdfReader
 from typing_extensions import Concatenate
 from langchain.text_splitter import CharacterTextSplitter
 from streamlit_extras.add_vertical_space import add_vertical_space
+from Crypto.Cipher import AES
 
 
 ASTRA_DB_APPLICATION_TOKEN = st.secrets["ASTRA_DB_APPLICATION_TOKEN"]
@@ -46,9 +47,14 @@ with st.sidebar:
 
         processFile = st.button('Process File')
         #str_pdf_file_name = "explanation.pdf"
-        if processFile:            
+        if processFile:                
+
             pdfreader = PdfReader(pdf)
+            if pdfreader.is_encrypted:
+                #pdf.decrypt("my-secret-password")  
+                st.write("the PDF is Encrypted")  
             st.session_state['pdf_file_name'] = pdfreader
+
 
             # read text from pdf
             raw_text = ''
